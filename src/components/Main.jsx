@@ -9,8 +9,17 @@ const FIELDS = {
 
 const Main = () => {
 
-  const {NAME, ROOM} = FIELDS
+  const { NAME, ROOM } = FIELDS
   const [values, setValues] = useState({[NAME]: "", [ROOM]: ""})
+
+  const handleChange = ({ target: { value, name }}) => {
+    setValues({...values, [name]: value })
+  }
+
+  const handleClick = (e) => {
+    const isDisabled = Object.values(values).some(v => !v)
+    if (isDisabled) e.preventDefault()
+  }
 
   return (
     <div className={styles.wrap}>
@@ -21,26 +30,30 @@ const Main = () => {
             <input 
               type="text" 
               name="name" 
-              value=""
+              value={values[NAME]}
               placeholder="Name"
               className={styles.input}
-              onChange={() => {}}
               autoComplete="off"
               required
+              onChange={handleChange}
             />
           </div>
           <div className={styles.group}>
             <input 
               type="text" 
               name="room" 
-              value=""
+              value={values[ROOM]}
               placeholder="Room" 
               className={styles.input}
-              onChange={() => {}}
               autoComplete="off"
+              onChange={handleChange}
             />
           </div>
-          <Link to={`/chat?name=${values[NAME]}&room=${values[ROOM]}`}>
+          <Link 
+            to={`/chat?name=${values[NAME]}&room=${values[ROOM]}`}
+            onClick={handleClick}
+            className={styles.group}
+          >
             <button type='submit' className={styles.button}>
               Sign In
             </button>
